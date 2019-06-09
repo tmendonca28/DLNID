@@ -18,36 +18,23 @@ import h5py
 from keras import callbacks
 from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau, CSVLogger
 
-#traindata = pd.read_csv('kdd/binary/kddtrain.csv', header=None)
 testdata = pd.read_csv('C:/Development/DLNID/Datasets/NSL-KDD/KDDTestRenameNominalValues.csv', header=None)
 
-
-#X = traindata.iloc[:,0:42]
-#Y = traindata.iloc[:,0]
 C = testdata.iloc[1:,41]
 T = testdata.iloc[1:,0:41]
 
-'''
-scaler = Normalizer().fit(X)
-trainX = scaler.transform(X)
-# summarize transformed data
-np.set_printoptions(precision=3)
-#print(trainX[0:5,:])
-'''
+
 scaler = Normalizer().fit(T)
 testT = scaler.transform(T)
 # summarize transformed data
 np.set_printoptions(precision=3)
-#print(testT[0:5,:])
 
 
-#y_train = np.array(Y)
 y_t = np.array(C)
 y_test = y_t.astype(np.int)
 
 
 # reshape input to be [samples, time steps, features]
-#X_train = np.reshape(trainX, (trainX.shape[0], 1, trainX.shape[1]))
 X_train = np.reshape(testT, (testT.shape[0], 1, testT.shape[1]))
 
 
