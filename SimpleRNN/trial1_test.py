@@ -45,7 +45,7 @@ model = Sequential()
 model.add(SimpleRNN(4,input_dim=41))  # try using a GRU instead, for fun
 model.add(Dropout(0.1))
 model.add(Dense(1))
-model.add(Activation('sigmoid'))
+model.add(Activation('sigmoid'))     # Sigmoid activation makes sure the values are between 0 and 1
 
 
 # try using different optimizers and different optimizer configs
