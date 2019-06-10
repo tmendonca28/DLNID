@@ -52,18 +52,18 @@ batch_size = 32
 
 # 1. define the network
 model = Sequential()
-model.add(SimpleRNN(32,input_dim=41, return_sequences=True))  # try using a GRU instead, for fun
+model.add(SimpleRNN(32,input_dim=41, return_sequences=True))  # try using a GRU
 model.add(Dropout(0.1))
-model.add(SimpleRNN(32, return_sequences=True))  # try using a GRU instead, for fun
+model.add(SimpleRNN(32, return_sequences=True))
 model.add(Dropout(0.1))
-model.add(SimpleRNN(32, return_sequences=True))  # try using a GRU instead, for fun
+model.add(SimpleRNN(32, return_sequences=True))
 model.add(Dropout(0.1))
-model.add(SimpleRNN(32, return_sequences=False))  # try using a GRU instead, for fun
+model.add(SimpleRNN(32, return_sequences=False))
 model.add(Dropout(0.1))
 model.add(Dense(1))
 model.add(Activation('sigmoid'))
 
-# try using different optimizers and different optimizer configs
+# try using different configs
 model.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])
 checkpointer = callbacks.ModelCheckpoint(filepath="kddresults/lstm4layer/checkpoint-{epoch:02d}.hdf5", verbose=1, save_best_only=True,monitor='val_acc',mode='max')
 csv_logger = CSVLogger('csv_logger4.csv',separator=',', append=False)

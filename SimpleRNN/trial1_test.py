@@ -20,8 +20,8 @@ from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau, C
 test_data = pd.read_csv('C:/Development/DLNID/Datasets/NSL-KDD/KDDTestRenameNominalValues.csv', header=None)
 
 
-ctest = test_data.iloc[1:,41]
-t = test_data.iloc[1:,0:41]
+ctest = test_data.iloc[1:,41]       # class column for test data
+t = test_data.iloc[1:,0:41]         # all other columns for test data
 
 scaler = Normalizer().fit(t)
 test_t = scaler.transform(t)
@@ -42,20 +42,19 @@ batch_size = 32
 
 # 1. define the network
 model = Sequential()
-model.add(SimpleRNN(4,input_dim=41))  # try using a GRU instead, for fun
+model.add(SimpleRNN(4,input_dim=41))  # try using a GRU
 model.add(Dropout(0.1))
 model.add(Dense(1))
 model.add(Activation('sigmoid'))     # Sigmoid activation makes sure the values are between 0 and 1
 
 
-# try using different optimizers and different optimizer configs
+# try using different configs
 model.load_weights("kddresults/lstm1layer/checkpoint-53.hdf5")
 
 model.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])
 y_train1 = y_test
 
 y_pred = model.predict_classes(x_train)
-# pdb.set_trace()
 accuracy = accuracy_score(y_train1, y_pred)
 recall = recall_score(y_train1, y_pred , average="binary")
 precision = precision_score(y_train1, y_pred , average="binary")

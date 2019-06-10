@@ -20,7 +20,10 @@ from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau, C
 
 testdata = pd.read_csv('C:/Development/DLNID/Datasets/NSL-KDD/KDDTestRenameNominalValues.csv', header=None)
 
+# class column
 C = testdata.iloc[1:,41]
+
+# other columns
 T = testdata.iloc[1:,0:41]
 
 
@@ -42,19 +45,19 @@ batch_size = 32
 
 # 1. define the network
 model = Sequential()
-model.add(SimpleRNN(32,input_dim=41, return_sequences=True))  # try using a GRU instead, for fun
+model.add(SimpleRNN(32,input_dim=41, return_sequences=True))  # try using a GRU
 model.add(Dropout(0.1))
-model.add(SimpleRNN(32, return_sequences=True))  # try using a GRU instead, for fun
+model.add(SimpleRNN(32, return_sequences=True))  # try using a GRU
 model.add(Dropout(0.1))
-model.add(SimpleRNN(32, return_sequences=True))  # try using a GRU instead, for fun
+model.add(SimpleRNN(32, return_sequences=True))  # try using a GRU
 model.add(Dropout(0.1))
-model.add(SimpleRNN(32, return_sequences=False))  # try using a GRU instead, for fun
+model.add(SimpleRNN(32, return_sequences=False))  # try using a GRU
 model.add(Dropout(0.1))
 model.add(Dense(1))
 model.add(Activation('sigmoid'))
 
 
-# try using different optimizers and different optimizer configs
+# try using different configs
 model.load_weights("kddresults/lstm4layer/fullmodel/lstm4layer_model.hdf5")
 
 model.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])

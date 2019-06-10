@@ -17,17 +17,16 @@ import h5py
 from keras import callbacks
 from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau, CSVLogger
 
-
+# datasets were numericalized using weka
 train_data = pd.read_csv('C:/Development/DLNID/Datasets/NSL-KDD/KDDTrainRenameNominalValues.csv', header=None)
 test_data = pd.read_csv('C:/Development/DLNID/Datasets/NSL-KDD/KDDTestRenameNominalValues.csv', header=None)
 
-# iloc[rows to extract, columns to extract]
-x = train_data.iloc[1:, 0:41]
-# y shows duration for each record
-y = train_data.iloc[1:, 41]
+# iloc[r,c]
+x = train_data.iloc[1:, 0:41]     # x has all other columns in train dataset
+y = train_data.iloc[1:, 41]       # y has class column for train dataset
 
-c = test_data.iloc[1:, 41]
-t = test_data.iloc[1:, 0:41]
+c = test_data.iloc[1:, 41]        # c has class column for test dataset
+t = test_data.iloc[1:, 0:41]      # t has all other columns for test dataset
 
 
 # Normalize the training data
@@ -53,8 +52,6 @@ x_test = np.reshape(test_t, (test_t.shape[0], 1, test_t.shape[1]))
 
 print(x_train.shape)
 
-# batch_size: Integer or None. Number of samples per gradient update.If unspecified, batch_size will default to 32
-# If dataset is small, it's best to make the batch_size equal to size of training data
 batch_size = 32
 
 # defining the network
@@ -65,7 +62,7 @@ model.add(Dense(1))
 model.add(Activation('sigmoid'))
 print(model.get_config())
 
-# try using different optimizers and different optimizer configs
+# try using different configs
 model.compile(loss='binary_crossentropy',optimizer='adam',metrics=['accuracy'])
 checkpointer = callbacks.ModelCheckpoint(filepath="kddresults/lstm1layer/checkpoint-{epoch:02d}.hdf5", verbose=1, save_best_only=True, monitor='val_acc',mode='max')
 csv_logger = CSVLogger('csv_logger.csv',separator=',', append=False)
