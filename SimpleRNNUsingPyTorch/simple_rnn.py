@@ -8,8 +8,8 @@ import pandas as pd
 import numpy as np
 
 # datasets were numericalized using weka
-train_data = pd.read_csv('C:/Development/DLNID/Datasets/NSL-KDD/KDDTrainRenameNominalValues.csv', header=0, low_memory=False, dtype = np.float32)
-test_data = pd.read_csv('C:/Development/DLNID/Datasets/NSL-KDD/KDDTestRenameNominalValues.csv', header=0, low_memory=False, dtype = np.float32)
+train_data = pd.read_csv('C:/Development/DLNID/Datasets/NSL-KDD/KDDTrainRenameNominalValuesNormalized.csv', header=0, low_memory=False, dtype = np.float32)
+test_data = pd.read_csv('C:/Development/DLNID/Datasets/NSL-KDD/KDDTestRenameNominalValuesNormalized.csv', header=0, low_memory=False, dtype = np.float32)
 
 targets_pd = train_data.iloc[0:, 41]
 features_pd = train_data.iloc[0:, 0:41]
@@ -114,7 +114,7 @@ for epoch in range(num_epochs):
             correct = 0
             total = 0
             # Iterate through test dataset
-            for images, labels in train_loader:
+            for images, labels in test_loader:
                 images = Variable(images.view(-1, seq_dim, input_dim))
                 
                 # Forward propagation
