@@ -1,9 +1,11 @@
 import pdb
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 import torchvision.transforms as transforms
 from torch.autograd import Variable
 from sklearn.model_selection import train_test_split
+from statistics import mean
 import pandas as pd
 import numpy as np
 
@@ -62,12 +64,13 @@ class RNNModel(nn.Module):
             
         # One time step
         out, (h_n, h_c) = self.rnn(x, None)
-        out = self.fc(out[:, -1, :]) 
+        out = self.fc(out[:, -1, :])
+        out = torch.sigmoid(out)
         return out
     
 # Create RNN
 input_dim = 41    # input dimension
-hidden_dim = 80  # hidden layer dimension; was 100 before
+hidden_dim = 240  # hidden layer dimension; was 100 before
 layer_dim =  1    # number of hidden layers; was 2 before
 output_dim = 2   # output dimension
 
@@ -77,13 +80,14 @@ model = RNNModel(input_dim, hidden_dim, layer_dim, output_dim)
 error = nn.CrossEntropyLoss()
 
 # SGD Optimizer
-learning_rate = 0.1
+learning_rate = 0.5
 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
 seq_dim = 1  
 loss_list = []
 iteration_list = []
 accuracy_list = []
+acc = []
 count = 0
 for epoch in range(num_epochs):
     for i, (images, labels) in enumerate(train_loader):
@@ -98,7 +102,7 @@ for epoch in range(num_epochs):
         # Forward propagation
         outputs = model(train)
         
-        # Calculate softmax and ross entropy loss
+        # Calculate softmax and cross entropy loss
         loss = error(outputs, labels)
         
         # Calculating gradients
@@ -129,12 +133,13 @@ for epoch in range(num_epochs):
                 correct += (predicted == labels).sum()
             
             accuracy = 100 * correct / float(total)
-            
             # store loss and iteration
             loss_list.append(loss.data)
             iteration_list.append(count)
             accuracy_list.append(accuracy)
             if count % 500 == 0:
                 # Print Loss
+                acc.append(accuracy.item())
                 print('Iteration: {}  Loss: {}  Accuracy: {} %'.format(count, loss.data.item(), accuracy))
 
+print("{0:.2f}".format(mean(acc)))
